@@ -1,10 +1,11 @@
 import 'package:ecommerce_app/features/products/views/screens/home_scren.dart';
 import 'package:ecommerce_app/features/onboarding/views/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
-import '../../features/auth/views/screens/login_screen.dart';
-import '../../features/auth/views/screens/register_screen.dart';
-import '../../features/auth/views/screens/forget_password_screen.dart';
-import '../../features/auth/views/screens/verifcation_code_screen.dart';
+
+import '../../features/auth/presentation/views/screens/forget_password_screen.dart';
+import '../../features/auth/presentation/views/screens/login_screen.dart';
+import '../../features/auth/presentation/views/screens/register_screen.dart';
+import '../../features/auth/presentation/views/screens/verifcation_code_screen.dart';
 
 class AppRoutes {
   static const String onboarding = '/onboarding';
