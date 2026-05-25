@@ -1,9 +1,12 @@
+import 'package:ecommerce_app/core/network/api_errors.dart';
 import 'package:ecommerce_app/core/routes/app_routes.dart';
 import 'package:ecommerce_app/core/utils/app_assets.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/core/widgets/TextFormField.dart';
+import 'package:ecommerce_app/features/auth/data/models/auth_repo.dart';
 import 'package:ecommerce_app/features/products/views/screens/home_scren.dart';
 import 'package:flutter/material.dart';
+import '../../../../../core/utils/helper.dart';
 import '../../../../../core/widgets/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,7 +28,29 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+  AuthRepo authRepo=AuthRepo();
+  Future<void>login()async{
+    try{
+      final user =await authRepo.login(_usernameController.text, _passwordController.text);
+      if(user !=null){
+        await Helper.saveToken(user.token);
 
+
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+
+
+      }
+
+    } catch (e) {
+      String errMsg = 'Unhandled error';
+      if (e is ApiErrors) {
+        errMsg = e.message;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errMsg)),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         isLoading: false, 
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                    Navigator.pushReplacementNamed(context, AppRoutes.home);
+                            login();
                           }
                         },
                       ),

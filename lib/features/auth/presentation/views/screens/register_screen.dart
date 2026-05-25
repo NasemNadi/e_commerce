@@ -3,7 +3,10 @@ import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/core/widgets/TextFormField.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/network/api_errors.dart';
+import '../../../../../core/routes/app_routes.dart';
 import '../../../../../core/widgets/custom_button.dart';
+import '../../../data/models/auth_repo.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,7 +23,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController        = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey                   = GlobalKey<FormState>();
-
+  final AuthRepo _authRepo = AuthRepo();
+  bool _isLoading = false;
   @override
   void dispose() {
     _nameController.dispose();
@@ -31,7 +35,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
+  Future<void> _signUp() async {
+    setState(() => _isLoading = true); // شغل الأنميشن بتاع الـ Loading
 
+    try {
+      final user = await _authRepo.register(
+        name: _nameController.text.trim(),
+        username: _usernameController.text.trim(),
+        phone: _phoneController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text
+      );
+
+      if (user != null) {
+        Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
+      }
+    } catch (e) {
+      String errMsg = 'Unhandled registration error';
+      if (e is ApiErrors) {
+        errMsg = e.message;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errMsg), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,10 +212,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       // Sign Up Button
                       CustomButton(
                         text: 'Sign Up',
-                        isLoading: false, // UI ثابت بدون لودينج حالياً
+                        isLoading: _isLoading, // 👈 ربطنا الـ Loading بالزرار هنا
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.pop(context);
+                          // التأكد من صحة الحقول أولاً محلياً
+                          if (_formKey.currentState!.validate() && !_isLoading) {
+                            _signUp(); // مناداة ميثود الـ API
                           }
                         },
                       ),
