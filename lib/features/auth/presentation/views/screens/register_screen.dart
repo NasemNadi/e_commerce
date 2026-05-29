@@ -5,9 +5,8 @@ import 'package:ecommerce_app/core/widgets/TextFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/widgets/custom_button.dart';
-import '../../../data/cubit/auth_cubit.dart';
-import '../../../data/cubit/auth_state.dart';
-
+import '../../cubits/auth_cubit.dart';
+import '../../cubits/auth_state.dart';
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 

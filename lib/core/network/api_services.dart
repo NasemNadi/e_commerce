@@ -10,7 +10,7 @@ Future<dynamic> get(String endpoint) async{
     final response =  await dioCilent.dio.get(endpoint);
     return response.data;
   } on DioException catch (e) {
-    return ApiException.handleError(e);
+    throw ApiException.handleError(e);
   }
 }
 // pst method
@@ -19,7 +19,7 @@ Future<dynamic> get(String endpoint) async{
       final response =  await dioCilent.dio.post(endpoint,data: body);
       return response.data;
     } on DioException catch (e) {
-      return ApiException.handleError(e);
+      throw ApiException.handleError(e);
     }
   }
   // put method
@@ -28,7 +28,7 @@ Future<dynamic> get(String endpoint) async{
       final response =  await dioCilent.dio.put(endpoint,data: body);
       return response.data;
     } on DioException catch (e) {
-      return ApiException.handleError(e);
+      throw ApiException.handleError(e);
     }
   }
   // delete method
@@ -37,7 +37,7 @@ Future<dynamic> get(String endpoint) async{
       final response =  await dioCilent.dio.delete(endpoint,data: body);
       return response.data;
     } on DioException catch (e) {
-      return ApiException.handleError(e);
+      throw ApiException.handleError(e);
     }
   }
 }

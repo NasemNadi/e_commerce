@@ -2,12 +2,12 @@ import 'package:ecommerce_app/core/routes/app_routes.dart';
 import 'package:ecommerce_app/core/utils/app_assets.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:ecommerce_app/core/widgets/TextFormField.dart';
-import 'package:ecommerce_app/features/products/views/screens/home_scren.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/widgets/custom_button.dart';
-import '../../../data/cubit/auth_cubit.dart';
-import '../../../data/cubit/auth_state.dart';
+import '../../../../products/presentation/views/screens/home_scren.dart';
+import '../../cubits/auth_cubit.dart';
+import '../../cubits/auth_state.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

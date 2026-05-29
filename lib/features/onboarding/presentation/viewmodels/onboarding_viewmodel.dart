@@ -1,7 +1,7 @@
 import 'package:ecommerce_app/core/utils/app_assets.dart';
 import 'package:flutter/material.dart';
-import '../models/onboarding_model.dart';
- 
+import '../../data/models/onboarding_model.dart';
+
 class OnboardingViewModel extends ChangeNotifier {
   int _currentPage = 0;
   int get currentPage => _currentPage;

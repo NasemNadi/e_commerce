@@ -1,8 +1,9 @@
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/core/widgets/appbar.dart';
-import 'package:ecommerce_app/features/products/views/widgets/category_card.dart';
-import 'package:ecommerce_app/features/products/views/widgets/home_search_bar.dart';
+
+import '../widgets/category_card.dart';
+import '../widgets/home_search_bar.dart';
 
 class AllCategoriesScreen extends StatelessWidget {
   const AllCategoriesScreen({super.key});

@@ -1,9 +1,9 @@
 import 'package:ecommerce_app/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../../core/widgets/custom_button.dart';
 import '../../viewmodels/onboarding_viewmodel.dart';
 import '../widgets/onboarding_page.dart';
-import '../../../../core/widgets/custom_button.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

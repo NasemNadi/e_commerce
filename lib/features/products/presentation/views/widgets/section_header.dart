@@ -19,7 +19,7 @@ class SectionHeader extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color:AppColors.blacktext,
           ),
@@ -30,8 +30,9 @@ class SectionHeader extends StatelessWidget {
             child: const Text(
               'View all',
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 16,
                 color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold
               ),
             ),
           ),
