@@ -1,7 +1,7 @@
 class UserModel {
   final String id;
   final String name;
-  final String username; // 👈 ضيف الحقل ده هنا
+  final String username;
   final String email;
   final String? phone;
   final String token;
@@ -9,7 +9,7 @@ class UserModel {
   const UserModel({
     required this.id,
     required this.name,
-    required this.username, // 👈 وهنا
+    required this.username,
     required this.email,
     this.phone,
     required this.token,
@@ -21,7 +21,7 @@ class UserModel {
       return UserModel(
         id:       (data['_id']   ?? data['id']    ?? '').toString(),
         name:     (data['name']  ?? '').toString(),
-        username: (data['username'] ?? data['userName'] ?? '').toString(), // 👈 وهنا
+        username: (data['username'] ?? data['userName'] ?? '').toString(),
         email:    (data['email'] ?? '').toString(),
         phone:    data['phone']?.toString(),
         token:    (json['token'] ?? data['token'] ?? '').toString(),

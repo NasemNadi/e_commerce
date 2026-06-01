@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/core/utils/app_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 
@@ -13,11 +14,11 @@ class HomeHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            // صورة المستخدم
             CircleAvatar(
               radius: 22,
               backgroundColor: AppColors.primaryColor.withOpacity(0.1),
-              child: const Icon(Icons.person, color: AppColors.primaryColor),
+              child:  Image.asset(AppAssets.avatar_icon),
+               //   color: AppColors.primaryColor),
             ),
             const SizedBox(width: 10),
             Text(

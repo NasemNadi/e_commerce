@@ -31,7 +31,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             body: SafeArea(
               child: Column(
                 children: [
-                  // PageView
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,
@@ -42,7 +41,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
 
-                  // Dots
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
@@ -64,7 +62,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                   const SizedBox(height: 32),
 
-                  // Button
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: CustomButton(

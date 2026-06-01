@@ -7,13 +7,12 @@ import 'category_model.dart';
 class ProductRepo {
   final ApiServices _apiServices = ApiServices();
 
-  // 1️⃣ جيب كل المنتجات
+  // getAllProducts
   Future<List<ProductModel>> getAllProducts() async {
     try {
       final response = await _apiServices.get(
         '/home/products?skip=0&limit=10&sortBy=price&order=asc',
       );
-      // تأمين لو الـ response راجع بأي شكل
       final List data = response is Map ? (response['list'] ?? response['data'] ?? []) : response;
       return data.map((e) => ProductModel.fromJson(e)).toList();
     } catch (e) {
@@ -22,7 +21,7 @@ class ProductRepo {
     }
   }
 
-  // 2️⃣ جيب منتجات category معينة
+  // getProductsByCategory
   Future<List<ProductModel>> getProductsByCategory(String category) async {
     final response = await _apiServices.get(
       '/home/products/category/$category?skip=0&limit=10',
@@ -31,7 +30,7 @@ class ProductRepo {
     return data.map((e) => ProductModel.fromJson(e)).toList();
   }
 
-  // 3️⃣ جيب منتجات brand معينة
+  // getProductsByBrand
   Future<List<ProductModel>> getProductsByBrand(String brand) async {
     final response = await _apiServices.get(
       '/home/products/brand/$brand?skip=0&limit=10',
@@ -40,12 +39,11 @@ class ProductRepo {
     return data.map((e) => ProductModel.fromJson(e)).toList();
   }
 
-  // 4️⃣ جيب كل الـ Categories (هنا المشكلة غالبا)
+  // getAllCategories
   Future<List<CategoryModel>> getAllCategories() async {
     try {
       final response = await _apiServices.get('/home/categories');
 
-      // لو الـ API بيرجع اللستة مباشرة [{}, {}] أو جوه مفتاح معين
       final List data = response is Map
           ? (response['list'] ?? response['data'] ?? response['categories'] ?? [])
           : response;
@@ -57,7 +55,7 @@ class ProductRepo {
     }
   }
 
-  // 5️⃣ جيب كل الـ Brands
+  // getAllBrands
   Future<List<BrandModel>> getAllBrands() async {
     try {
       final response = await _apiServices.get('/home/brands');

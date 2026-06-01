@@ -5,6 +5,8 @@ import 'package:ecommerce_app/core/utils/app_colors.dart';
 class ProductCard extends StatelessWidget {
   final ProductModel product;
   final VoidCallback onTap;
+  final VoidCallback? onFavoriteTap;
+  final bool isFavorite;
   final bool showAddButton;
   final bool showDiscount;
 
@@ -12,29 +14,28 @@ class ProductCard extends StatelessWidget {
     super.key,
     required this.product,
     required this.onTap,
+    this.onFavoriteTap,
+    this.isFavorite = false,
     this.showAddButton = false,
     this.showDiscount = false,
   });
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color:  AppColors.primaryColor.withOpacity(0.1),
+          color: AppColors.primaryColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade200), // ← رمادي مش أزرق
+          border: Border.all(color: Colors.grey.shade200),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            // ── صورة + badges ─────────────────────
             Expanded(
               child: Stack(
                 children: [
-                  // الصورة
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(12)),
@@ -50,10 +51,10 @@ class ProductCard extends StatelessWidget {
                             color: Colors.grey),
                       ),
                     )
-                        : Container(color: Colors.grey.shade100),
+                        : Container(
+                        color: AppColors.primaryColor.withOpacity(0.1)),
                   ),
 
-                  // Discount Badge — فوق شمال
                   if (showDiscount && product.discountPercentage > 0)
                     Positioned(
                       top: 6,
@@ -75,12 +76,11 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
 
-                  // Favorite Button — فوق يمين
                   Positioned(
                     top: 6,
                     right: 6,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: onFavoriteTap,
                       child: Container(
                         width: 28,
                         height: 28,
@@ -94,8 +94,11 @@ class ProductCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Icon(Icons.favorite_outline,
-                            size: 16, color: Colors.grey),
+                        child: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_outline,
+                          size: 16,
+                          color: isFavorite ? Colors.red : Colors.grey,
+                        ),
                       ),
                     ),
                   ),
@@ -103,14 +106,11 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            // ── بيانات المنتج ─────────────────────
             Padding(
               padding: const EdgeInsets.all(8),
-              child:
-              Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // السعر
                   Text(
                     '${product.price} LE',
                     style: const TextStyle(
@@ -122,7 +122,6 @@ class ProductCard extends StatelessWidget {
 
                   const SizedBox(height: 2),
 
-                  // الاسم
                   Text(
                     product.name,
                     style: const TextStyle(
@@ -134,13 +133,39 @@ class ProductCard extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 4),
-                  const Icon(Icons.star, color: Colors.amber, size: 12),
-                  const SizedBox(width: 2),
-                  Text(
-                    product.rating.toStringAsFixed(1),
-                    style: TextStyle(
-                        fontSize: 11, color: Colors.grey.shade600),
+
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 12),
+                      const SizedBox(width: 2),
+                      Text(
+                        product.rating.toStringAsFixed(1),
+                        style: TextStyle(
+                            fontSize: 11, color: Colors.grey.shade600),
+                      ),
+                    ],
                   ),
+
+                  if (showAddButton) ...[
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 28,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: EdgeInsets.zero,
+                        ),
+                        child: const Text('Add',
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.white)),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

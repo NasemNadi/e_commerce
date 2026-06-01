@@ -1,37 +1,40 @@
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/core/widgets/appbar.dart';
-
+import '../../../data/models/category_model.dart';
 import '../widgets/category_card.dart';
 import '../widgets/home_search_bar.dart';
 
 class AllCategoriesScreen extends StatelessWidget {
-  const AllCategoriesScreen({super.key});
+  final List<CategoryModel> categories;
 
-  static const List<String> _categories = [
-    'Electronics', 'Pampers', 'Furniture',
-    'Phones', 'Food', 'Fashion',
-    'Plants', 'Gaming',
-  ];
+  const AllCategoriesScreen({super.key, required this.categories});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:App_bar(titel:'Categories'),
+      appBar: App_bar(titel: 'Categories'),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: HomeSearchBar(onTap: () {}),
+            child: HomeSearchBar(
+              onChanged: (value) {
+                print("المستخدم بيكتب دلوقتي: $value");
+              },
+
+            ),
           ),
 
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('All Categories',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: AppColors.blacktext)),
+              child: Text(
+                'All Categories',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.blacktext),
+              ),
             ),
           ),
 
@@ -47,12 +50,11 @@ class AllCategoriesScreen extends StatelessWidget {
                   mainAxisSpacing: 12,
                   childAspectRatio: 1.1,
                 ),
-                itemCount: _categories.length,
+                itemCount: categories.length,
                 itemBuilder: (_, i) => CategoryCard(
-                  name: _categories[i],
-                  image: '',
+                  name: categories[i].name,
+                  image: categories[i].image,
                   onTap: () {
-                    // TODO: Navigate to Category Products
                   },
                 ),
               ),

@@ -38,12 +38,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        // ① لو نجح → روح Home
         if (state is AuthSuccess) {
           Navigator.pushNamedAndRemoveUntil(
               context, AppRoutes.home, (route) => false);
         }
-        // ② لو فشل → اعرض الـ error
         if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -60,7 +58,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // ── Back Button ───────────────────────
                   Padding(
                     padding: const EdgeInsets.only(left: 8, top: 12),
                     child: Align(
@@ -73,7 +70,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
 
-                  // ── Logo ──────────────────────────────
                   Image.asset(AppAssets.logo, height: 100),
 
                   const SizedBox(height: 24),
@@ -189,7 +185,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                           const SizedBox(height: 24),
 
-                          // ③ Sign Up Button — isLoading من الـ state
                           CustomButton(
                             text: 'Sign Up',
                             isLoading: state is AuthLoading,
@@ -246,7 +241,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 }
 
-// ── Field Label ───────────────────────────────────────
 class _FieldLabel extends StatelessWidget {
   final String text;
   const _FieldLabel({required this.text});

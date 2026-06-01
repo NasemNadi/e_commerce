@@ -4,33 +4,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/auth/data/models/auth_repo.dart';
 import 'features/auth/presentation/cubits/auth_cubit.dart';
+import 'features/products/presentation/cubits/FavoritesCubit.dart';
 import 'features/products/presentation/cubits/product_cubit.dart';
-
-void main() {
-  runApp(
-  
-       MyApp(),
-    
-  );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => AuthCubit(AuthRepo())),
-          BlocProvider(create: (_) => ProductsCubit()..fetchAllProducts()),
-
-        ],
+      providers: [
+        BlocProvider(
+          create: (_) => AuthCubit(AuthRepo()),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (_) => ProductsCubit()..fetchAllProducts(),
+        ),
+        BlocProvider(
+          create: (_) => FavoritesCubit(),
+        ),
+      ],
       child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      initialRoute: AppRoutes.onboarding,
-      routes: AppRoutes.routes,
-      )
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        initialRoute: AppRoutes.onboarding,
+        routes: AppRoutes.routes,
+      ),
     );
   }
 }

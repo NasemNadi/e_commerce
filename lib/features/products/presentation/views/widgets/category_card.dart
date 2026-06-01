@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
   final String name;
-  final String image; // المتغير اللي بياخد الصورة من الـ API
+  final String image;
   final VoidCallback onTap;
 
   const CategoryCard({

@@ -23,9 +23,9 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
     id:                 json['id'] ?? 0,
-    name:               json['title'] ?? json['name'] ?? '', // تأمين الاسم من title أو name
+    name:               json['title'] ?? json['name'] ?? '',
     price:              (json['price'] as num?)?.toDouble() ?? 0.0,
-    image:              json['thumbnail'] ?? json['image'] ?? '', // تأمين الصورة من thumbnail أو image
+    image:              json['thumbnail'] ?? json['image'] ?? '',
     description:        json['description'] ?? '',
     category:           json['category'] ?? '',
     brand:              json['brand'] ?? '',

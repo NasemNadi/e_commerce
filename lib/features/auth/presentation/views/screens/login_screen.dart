@@ -33,11 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        // ① لو نجح → روح Home
         if (state is AuthSuccess) {
           Navigator.pushReplacementNamed(context, AppRoutes.home);
         }
-        // ② لو فشل → اعرض الـ error
         if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -54,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // ── Skip Button ──────────────────────────
                   Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
@@ -96,7 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          // ✉️ Email
                           CustomTextField(
                             hintText: 'Username or Email',
                             prefixIcon: Icons.email_outlined,
@@ -112,7 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 16),
 
-                          // 🔒 Password
                           CustomTextField(
                             hintText: 'Password',
                             prefixIcon: Icons.lock_outline,
@@ -131,7 +126,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 8),
 
-                          // Remember Me & Forgot Password
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -166,7 +160,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 16),
 
-                          // ③ Log In Button — isLoading من الـ state
                           CustomButton(
                             text: 'Log In',
                             isLoading: state is AuthLoading,
@@ -182,7 +175,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 20),
 
-                          // Or Continue With
                           Row(
                             children: [
                               Expanded(
@@ -206,7 +198,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           const SizedBox(height: 24),
 
-                          // Navigate to Register
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

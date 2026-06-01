@@ -1,37 +1,40 @@
 import 'package:ecommerce_app/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/core/widgets/appbar.dart';
-
-import '../widgets/category_card.dart';
+import '../../../data/models/brand_model.dart';
+import '../widgets/brand_card.dart';
 import '../widgets/home_search_bar.dart';
 
 class AllBrandsScreen extends StatelessWidget {
-  const AllBrandsScreen({super.key});
+  final List<BrandModel> brands;
 
-  static const List<String> _brands = [
-    'TOWN TEAM', 'JBL', 'Pampers',
-    'Canon', 'Apple', 'adidas',
-    'LACOSTE', 'TOSHIBA',
-  ];
+  const AllBrandsScreen({super.key, required this.brands});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:AppColors.scaffoldBackground,
-        appBar: App_bar(titel: 'Brands'),
+      backgroundColor: AppColors.scaffoldBackground,
+      appBar: App_bar(titel: 'Brands'),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: HomeSearchBar(onTap: () {}),
+            child: HomeSearchBar(
+              onChanged: (value) {
+                print("المستخدم بيكتب دلوقتي: $value");
+              },
+
+            ),
           ),
 
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('All Brands',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.blacktext)),
+              child: Text(
+                'All Brands',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.blacktext),
+              ),
             ),
           ),
 
@@ -45,14 +48,13 @@ class AllBrandsScreen extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 1.1,
+                  childAspectRatio: 2.5,
                 ),
-                itemCount: _brands.length,
-                itemBuilder: (_, i) => CategoryCard(
-                  name: _brands[i],
-                  image: '',
+                itemCount: brands.length,
+                itemBuilder: (_, i) => BrandCard(
+                  name: brands[i].name,
+                  emoji: brands[i].emoji,
                   onTap: () {
-                    // TODO: Navigate to Brand Products
                   },
                 ),
               ),

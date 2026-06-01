@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/features/products/presentation/views/screens/all_categories_screen.dart';
+import 'package:ecommerce_app/features/products/presentation/views/screens/product_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/core/utils/app_colors.dart';
@@ -11,6 +13,9 @@ import '../widgets/home_header.dart';
 import '../widgets/home_search_bar.dart';
 import '../widgets/product_card.dart';
 import '../widgets/section_header.dart';
+import 'all_brands_screen.dart';
+import 'cart_screen.dart';
+import 'favorites_screen.dart';
 import 'product_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -65,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Home Tab ──────────────────────────────
   Widget _buildHome() {
     return BlocBuilder<ProductsCubit, ProductsState>(
       builder: (context, state) {
@@ -77,30 +81,30 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const SizedBox(height: 16),
 
-                // ① Header
                 const HomeHeader(userName: 'Yousef'),
                 const SizedBox(height: 16),
 
-                // ② Search Bar
-                HomeSearchBar(onTap: () {}),
+                HomeSearchBar( onChanged: (value) {
+                  print("المستخدم بيكتب دلوقتي: $value");
+                },),
                 const SizedBox(height: 16),
 
-                // ③ Banner
                 const HomeBanner(),
                 const SizedBox(height: 20),
 
-                // ④ Popular Products
                 SectionHeader(
                   title: 'Popular Product',
                   onViewAll: () {
-                    final List<ProductModel> productsList = state is HomeDataSuccess ?
+                    final List<
+                        ProductModel> productsList = state is HomeDataSuccess ?
                     (state as HomeDataSuccess).products : [];
 
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (_) => ProductListScreen(
-                        title: 'Popular Product',
-                        products: productsList,
-                      ),
+                      builder: (_) =>
+                          ProductListScreen(
+                            title: 'Popular Product',
+                            products: productsList,
+                          ),
                     ));
                   },
                 ),
@@ -111,83 +115,113 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 180,
                     child: Center(child: CircularProgressIndicator()),
                   )
-                else if (state is ProductsError)
-                  SizedBox(
-                    height: 180,
-                    child: Center(child: Text(state.message,
-                        style: const TextStyle(color: Colors.red))),
-                  )
-                else if (state is HomeDataSuccess)
+                else
+                  if (state is ProductsError)
                     SizedBox(
                       height: 180,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: state.products.take(6).length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 12),
-                        itemBuilder: (_, i) => SizedBox(
-                          width: 130,
-                          child: ProductCard(
-                            showDiscount: true,
-                            product: state.products[i],
-                            onTap: () {},
-                          ),
+                      child: Center(child: Text(state.message,
+                          style: const TextStyle(color: Colors.red))),
+                    )
+                  else
+                    if (state is HomeDataSuccess)
+                      SizedBox(
+                        height: 180,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.products
+                              .take(6)
+                              .length,
+                          separatorBuilder: (_, __) =>
+                          const SizedBox(width: 12),
+                          itemBuilder: (_, i) =>
+                              SizedBox(
+                                width: 130,
+                                child:
+                                ProductCard(
+                                    product: state.products[i],
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (_) => ProductDetailScreen(product: state.products[i]),
+                                      ));
+                                    },
+
+                                ),
+                              ),
                         ),
                       ),
-                    ),
 
                 const SizedBox(height: 20),
 
-                // ⑤ Categories
-                SectionHeader(
-                  title: 'Category',
-                  onViewAll: () => Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => const ProductListScreen(title: 'Categories'),
-                  )),
-                ),
-                const SizedBox(height: 12),
+                if (state is HomeDataSuccess) ...[
+                  SectionHeader(
+                    title: 'Categories',
+                    onViewAll: () =>
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                AllCategoriesScreen(
+                                categories: state
+                                    .categories),
+                          ),
+                        ),
+                  ),
+                  const SizedBox(height: 12),
 
-                if (state is ProductsLoading)
-                  const SizedBox(height: 100, child: Center(child: CircularProgressIndicator()))
-                else if (state is ProductsError)
-                  Center(child: Text('خطأ في تحميل الأقسام: ${state.message}', style: const TextStyle(color: Colors.red)))
-                else if (state is HomeDataSuccess)
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 0.9,
-                      ),
-                      itemCount: state.categories.length,
-                      itemBuilder: (_, i) => CategoryCard(
-                        name:  state.categories[i].name,
-                        image: state.categories[i].image.isNotEmpty ? state.categories[i].image : 'https://via.placeholder.com/70',
-                        onTap: () {
-                          context.read<ProductsCubit>().fetchByCategory(state.categories[i].name);
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (_) => ProductListScreen(title: state.categories[i].name),
-                          ));
-                        },
-                      ),
-                    ),
+                  if (state is ProductsLoading)
+                    const SizedBox(height: 100,
+                        child: Center(child: CircularProgressIndicator()))
+                  else
+                    if (state is ProductsError)
+                      Center(child: Text('خطأ في تحميل الأقسام: $state.',
+                          style: const TextStyle(color: Colors.red)))
+                    else
+                      if (state is HomeDataSuccess)
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 0.9,
+                          ),
+                          itemCount: state.categories.length,
+                          itemBuilder: (_, i) =>
+                              CategoryCard(
+                                name: state.categories[i].name,
+                                image: state.categories[i].image.isNotEmpty
+                                    ? state.categories[i].image
+                                    : 'https://via.placeholder.com/70',
+                                onTap: () {
+                                  context.read<ProductsCubit>().fetchByCategory(
+                                      state.categories[i].name);
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (_) =>
+                                        ProductListScreen(
+                                        title: state.categories[i].name),
+                                  ));
+                                },
+                              ),
+                        ),
+                ],
 
                 const SizedBox(height: 20),
 
-                // ⑥ Best for You
-                // ⑥ Best for You
                 SectionHeader(
                   title: 'Best for You',
                   onViewAll: () {
-                    // تأمين الـ state والـ Casting عشان الـ Compiler يقرا المنتجات صح
-                    final List<ProductModel> productsList = state is HomeDataSuccess ? (state as HomeDataSuccess).products : [];
+                    final List<
+                        ProductModel> productsList = state is HomeDataSuccess
+                        ? (state as HomeDataSuccess).products
+                        : [];
 
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (_) => ProductListScreen(
-                        title: 'Best for You',
-                        products: productsList,
-                      ),
+                      builder: (_) =>
+                          ProductListScreen(
+                            title: 'Best for You',
+                            products: productsList,
+                          ),
                     ));
                   },
                 ),
@@ -197,7 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 220,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemCount: state.products.skip(4).take(4).length,
+                      itemCount: state.products
+                          .skip(4)
+                          .take(4)
+                          .length,
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
                       itemBuilder: (_, i) {
                         final product = state.products.skip(4).toList()[i];
@@ -211,46 +248,52 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 20),
 
-                // ⑦ Brands
-                SectionHeader(
-                  title: 'Brands',
-                  onViewAll: () => Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => const ProductListScreen(title: 'Brands'),
-                  )),
-                ),
-                const SizedBox(height: 12),
-                if (state is HomeDataSuccess)
-                  SizedBox(
-                    height: 70,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: state.brands.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 12),
-                      itemBuilder: (_, i) =>
-                          BrandCard(
-                            name: state.brands[i].name,   // 👈 باصي الاسم اللي جاي من الموديل
-                            emoji: state.brands[i].emoji, // 👈 باصي الإيموجي اللي جاي من الموديل
-                            onTap: () {
-                              // هنا اللوجيك بتاع الضغطة (الحالة التانية)
-                            },
-                          ) // 👈 تأكد إن القوس مقفول هنا صح ومفيش أقسا
-                    ),
+                if (state is HomeDataSuccess) ...[
+                  SectionHeader(
+                    title: 'Brands',
+                    onViewAll: () =>
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                AllBrandsScreen(brands: state.brands),
+                          ),
+                        ),
                   ),
+                  const SizedBox(height: 12),
+                  if (state is HomeDataSuccess)
+                    SizedBox(
+                      height: 70,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.brands.length,
+                          separatorBuilder: (_, __) =>
+                          const SizedBox(width: 12),
+                          itemBuilder: (_, i) =>
+                              BrandCard(
+                                name: state.brands[i].name,
+                                emoji: state.brands[i].emoji,
+                                onTap: () {},
+                              )
+                      ),
+                    ),
+                ],
                 const SizedBox(height: 20),
 
-                // ⑧ Buy Again
-                // ⑧ Buy Again
                 SectionHeader(
                   title: 'Buy Again',
                   onViewAll: () {
-                    // تأمين الـ state والـ Casting عشان الـ Compiler يقرا المنتجات صح
-                    final List<ProductModel> productsList = state is HomeDataSuccess ? (state as HomeDataSuccess).products : [];
+                    final List<
+                        ProductModel> productsList = state is HomeDataSuccess
+                        ? (state as HomeDataSuccess).products
+                        : [];
 
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (_) => ProductListScreen(
-                        title: 'Buy Again',
-                        products: productsList,
-                      ),
+                      builder: (_) =>
+                          ProductListScreen(
+                            title: 'Buy Again',
+                            products: productsList,
+                          ),
                     ));
                   },
                 ),
@@ -260,15 +303,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 180,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemCount: state.products.take(4).length,
+                      itemCount: state.products
+                          .take(4)
+                          .length,
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
-                      itemBuilder: (_, i) => SizedBox(
-                        width: 130,
-                        child: _BestForYouCard(
-                          product: state.products[i]
+                      itemBuilder: (_, i) =>
+                          SizedBox(
+                            width: 130,
+                            child: _BestForYouCard(
+                                product: state.products[i]
 
-                        ),
-                      ),
+                            ),
+                          ),
                     ),
                   ),
 
@@ -281,15 +327,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Other Tabs ────────────────────────────
   Widget _buildOtherTab() {
-    final titles = ['', 'Cart', 'Favorites', 'Menu'];
+    if (_currentIndex == 1) return const CartScreen();
+    if (_currentIndex == 2) return const FavoritesScreen();
+    final titles = ['', '', '', 'Menu'];
     return ProductListScreen(title: titles[_currentIndex]);
   }
 }
-// استبدل كود الـ _BestForYouCard في أسفل ملف الـ home_screen.dart بـ ده:
 class _BestForYouCard extends StatelessWidget {
-  final ProductModel product; // حدد النوع هنا صراحة بدل dynamic
+  final ProductModel product;
   const _BestForYouCard({required this.product});
   @override
   Widget build(BuildContext context) {
@@ -303,11 +349,9 @@ class _BestForYouCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          // ── صورة + badges ─────────────────────
           Expanded(
             child: Stack(
               children: [
-                // الصورة
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(12)),
@@ -330,30 +374,6 @@ class _BestForYouCard extends StatelessWidget {
                   ),
                 ),
 
-                // Discount Badge — فوق شمال
-                /*
-                if (showDiscount && product.discountPercentage > 0)
-                  Positioned(
-                    top: 6,
-                    left: 6,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        '${product.discountPercentage.toInt()}% OFF',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-*/
-                // Favorite — فوق يمين
                 Positioned(
                   top: 6,
                   right: 6,
@@ -381,7 +401,6 @@ class _BestForYouCard extends StatelessWidget {
             ),
           ),
 
-          // ── بيانات المنتج ─────────────────────
           Padding(
             padding: const EdgeInsets.all(8),
             child: Column(

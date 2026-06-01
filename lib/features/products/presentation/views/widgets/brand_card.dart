@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BrandCard extends StatelessWidget {
-  final String name;  // 👈 استبدلنا الصورة باسم البراند (مثال: Chanel)
-  final String emoji; // 👈 واستبدلناها بالإيموجي اللي جاي من الـ API (مثال: 👗)
+  final String name;
+  final String emoji;
   final VoidCallback onTap;
 
   const BrandCard({
@@ -22,7 +22,7 @@ class BrandCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.grey.shade200),
-          borderRadius: BorderRadius.circular(12), // خليناه دائري أكتر عشان يبقى عصري
+          borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.02),
@@ -32,16 +32,14 @@ class BrandCard extends StatelessWidget {
           ],
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min, // عشان الكارت ياخد مساحة الكلام بالظبط
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // 1️⃣ عرض الإيموجي كأنه لوجو مكبر
             Text(
               emoji,
               style: const TextStyle(fontSize: 22),
             ),
             const SizedBox(width: 8),
 
-            // 2️⃣ عرض اسم البراند بجانبه
             Text(
               name,
               style: const TextStyle(
